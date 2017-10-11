@@ -1,0 +1,3 @@
+#This one liner can be used to identify uptime for a list of servers provided.
+
+GC C:\temp\servers.txt | % { Get-WmiObject win32_operatingsystem -CN $PSItem | select csname, @{LABEL='LastBootUpTime';EXPRESSION={$_.ConverttoDateTime($_.lastbootuptime)}}}
