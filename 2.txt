@@ -1,0 +1,1 @@
+Get-VM | Select-Object -ExpandProperty NetworkAdapters | Select-Object VMName,IPAddresses
