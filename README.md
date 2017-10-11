@@ -4,5 +4,5 @@ This is my first repository and contains generalized solutions for real-time pro
 
 Index
 
-	1. Uptime for list of servers
-	2. IP details of VM machines in Hyper-V
+	1. Uptime for list of servers - 1.txt
+	2. IP details of VM machines in Hyper-V - 2.txt
