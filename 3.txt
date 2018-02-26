@@ -1,10 +1,13 @@
+<#
 [System.Reflection.Assembly]::LoadWithPartialName("System.windows.forms") | Out-Null
 
 $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 $OpenFileDialog.initialDirectory = "C:\"
 $OpenFileDialog.filter = "TXT (*.txt)| *.txt"
 $OpenFileDialog.ShowDialog() | Out-Null
-$File = $OpenFileDialog.filename
+#>
+#$File = $OpenFileDialog.filename
+$File = "C:\temp\servers.txt"
 Write-host "Processing File $File"
 $Computers = Get-Content -Path $File
 Write-host "Computers in File `r`n $Computers"
