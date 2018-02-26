@@ -6,3 +6,16 @@ $OpenFileDialog.filter = "CSV (*.csv)| *.csv"
 $OpenFileDialog.ShowDialog() | Out-Null
 $File = $OpenFileDialog.filename
 $Computers = Get-Content -Path $File
+Foreach ($ComputerName in $Computers)
+{
+  $Sessions = Qwinsta /Server:$ComputerName
+  $Rows = $Sessions[1..$($Sessions.Count -1)]
+  Foreach ($r in $Rows)
+  {
+    If(($r.substring(48,8).Trim() -eq "Disc") -and ($r.substring(41,7).Trim() -ne "0"))
+    {
+      $ID = $r.substring(41,7).Trim()
+      rwinsta /Server:$ComputerName $ID
+    }
+   }
+ }
