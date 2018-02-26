@@ -5,17 +5,30 @@ $OpenFileDialog.initialDirectory = "C:\"
 $OpenFileDialog.filter = "TXT (*.txt)| *.txt"
 $OpenFileDialog.ShowDialog() | Out-Null
 $File = $OpenFileDialog.filename
+Write-host "Processing File $File"
 $Computers = Get-Content -Path $File
+Write-host "Computers in File `r`n $Computers"
 Foreach ($ComputerName in $Computers)
 {
   $Sessions = Qwinsta /Server:$ComputerName
+  Write-Host "Sessions on $ComputerName"
+  $Sessions
+  If(($Sessions[0] -replace " ") -eq "SESSIONNAMEUSERNAMEIDSTATETYPEDEVICE")
+  {
   $Rows = $Sessions[1..$($Sessions.Count -1)]
   Foreach ($r in $Rows)
   {
-    If(($r.substring(48,8).Trim() -eq "Disc") -and ($r.substring(41,7).Trim() -ne "0"))
+    Write-host "Processing $r"
+    If(($r.substring(48,8).Trim() -eq "Disc") -and ($r.substring(41,7).Trim() -ne "0"))
     {
-      $ID = $r.substring(41,7).Trim()
+      Write-host "Attempting to remove $r"
+      $ID = $r.substring(41,7).Trim()
       rwinsta /Server:$ComputerName $ID
     }
+    Else
+    {
+      Write-host "Skip -- $r"
+     }
    }
  }
+}
