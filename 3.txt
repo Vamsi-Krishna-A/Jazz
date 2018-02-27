@@ -5,12 +5,18 @@ $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
 $OpenFileDialog.initialDirectory = "C:\"
 $OpenFileDialog.filter = "TXT (*.txt)| *.txt"
 $OpenFileDialog.ShowDialog() | Out-Null
-#>
-#$File = $OpenFileDialog.filename
+
+$File = $OpenFileDialog.filename
 $File = "C:\temp\servers.txt"
 Write-host "Processing File $File"
 $Computers = Get-Content -Path $File
-Write-host "Computers in File `r`n $Computers"
+#>
+$Computers = @(
+"Xyz"
+"Abc"
+"Bdc"
+)
+Write-host "Computers processing are as below `r`n $Computers"
 Foreach ($ComputerName in $Computers)
 {
   $Sessions = Qwinsta /Server:$ComputerName
