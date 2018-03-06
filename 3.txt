@@ -11,33 +11,34 @@ $File = "C:\temp\servers.txt"
 Write-host "Processing File $File"
 $Computers = Get-Content -Path $File
 #>
+
 $Computers = @(
 "Xyz"
+"localhost"
 "Abc"
 "Bdc"
 )
 Write-host "Computers processing are as below `r`n $Computers"
 Foreach ($ComputerName in $Computers)
 {
-  $Sessions = Qwinsta /Server:$ComputerName
-  Write-Host "Sessions on $ComputerName"
-  $Sessions
-  If(($Sessions[0] -replace " ") -eq "SESSIONNAMEUSERNAMEIDSTATETYPEDEVICE")
-  {
-  $Rows = $Sessions[1..$($Sessions.Count -1)]
-  Foreach ($r in $Rows)
-  {
-    Write-host "Processing $r"
-    If(($r.substring(48,8).Trim() -eq "Disc") -and ($r.substring(41,7).Trim() -ne "0"))
-    {
-      Write-host "Attempting to remove $r"
-      $ID = $r.substring(41,7).Trim()
-      rwinsta /Server:$ComputerName $ID
-    }
-    Else
-    {
-      Write-host "Skip -- $r"
-     }
-   }
- }
-} 
+    $Sessions = Qwinsta /Server:$ComputerName  2>&1
+    if ($LastExitCode -eq 0)
+    {
+        Write-Host "Sessions on $ComputerName"
+        $Sessions
+        $Rows = $Sessions[1..$($Sessions.Count -1)]
+        Foreach ($r in $Rows)
+        {
+            If(($r.substring(48,8).Trim() -eq "Disc") -and ($r.substring(41,7).Trim() -ne "0"))
+            {
+                Write-host "Attempting to remove $r"
+                $ID = $r.substring(41,7).Trim()
+                rwinsta /Server:$ComputerName $ID
+            }
+        }    
+    }
+    else
+    {
+        Write-Warning "Skip for manual check -- $ComputeName"
+    }   
+}
